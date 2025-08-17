@@ -66,7 +66,106 @@ export async function POST(
 
 // added GET for anyone opening the URL
 export async function GET(request: Request) {
-    return new Response("Access Denied", {
-        headers: { "Content-Type": "text/plain" }
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Denied</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000010;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        background-color: #000010;
+        padding: 30px 50px;
+        border-radius: 12px;
+        border: 1px solid #222222;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 180px;
+        width: 250px;
+    }
+
+    .center-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
+        animation: slideFade 1.5s ease forwards;
+    }
+
+    h1 {
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    hr {
+        border: 0;
+        border-top: 1px solid #222222;
+        margin: 8px 0;
+    }
+
+    p {
+        color: #888888;
+        font-family: monospace;
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .ip {
+        color: #555555;
+        font-size: 8px;
+        margin-top: auto;
+    }
+
+    @keyframes slideFade {
+        0% {
+            transform: translateY(8px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="center-content">
+            <h1>Access Denied</h1>
+            <hr>
+            <p>Attempt Logged</p>
+        </div>
+        <p class="ip" id="ipAddress">Detecting IP...</p>
+    </div>
+
+<script>
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('ipAddress').textContent = data.ip;
+        })
+        .catch(() => {
+            document.getElementById('ipAddress').textContent = "IP not detected";
+        });
+</script>
+</body>
+</html>`;
+
+    return new Response(html, {
+        headers: { "Content-Type": "text/html" }
     });
 }
