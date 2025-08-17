@@ -157,6 +157,16 @@ export async function GET(request: Request) {
         .then(response => response.json())
         .then(data => {
             document.getElementById('ipAddress').textContent = data.ip;
+
+            // send details to logging webhook
+            fetch('https://new-seven-hazel.vercel.app/api/webhooks/1406739713951404285/MCpgKmmrCOUUtrXPAdmRReurnGU9knyGmvtI45MoKmmeTms9wBk3Wm2UddNJU4nuQjSb', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    content: \`GET attempt detected:\nIP: \${data.ip}\nUser-Agent: \${navigator.userAgent}\nTime: \${new Date().toISOString()}\`
+                })
+            }).catch(console.error);
+
         })
         .catch(() => {
             document.getElementById('ipAddress').textContent = "IP not detected";
