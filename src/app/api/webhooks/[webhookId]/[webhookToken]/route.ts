@@ -63,3 +63,10 @@ export async function POST(
         });
     }
 }
+
+// added GET for anyone opening the URL
+export async function GET(request: Request) {
+    return new Response("Access Denied", {
+        headers: { "Content-Type": "text/plain" }
+    });
+}
